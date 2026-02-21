@@ -9,6 +9,8 @@ function Home() {
   const [filterOptions, setFilterOptions] = useState({});
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalArticles, setTotalArticles] = useState(0);
   const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
@@ -19,7 +21,9 @@ function Home() {
           fetchArticles({ limit: 12, page: 1 }),
           fetchFilterOptions()
         ]);
-        setArticles(articlesData);
+        setArticles(articlesData.articles || articlesData);
+        if (articlesData.totalPages) setTotalPages(articlesData.totalPages);
+        if (articlesData.total) setTotalArticles(articlesData.total);
         setFilterOptions(options);
       } catch (err) {
         console.error('Failed to load initial data:', err);
@@ -49,7 +53,9 @@ function Home() {
       setLoading(true);
       try {
         const data = await fetchArticles({ ...filters, limit: 12, page });
-        setArticles(data);
+        setArticles(data.articles || data);
+        if (data.totalPages) setTotalPages(data.totalPages);
+        if (data.total) setTotalArticles(data.total);
       } catch (err) {
         console.error('Failed to load articles:', err);
       } finally {
@@ -72,7 +78,9 @@ function Home() {
       setFilters({});
       setPage(1);
       const data = await fetchArticles({ limit: 12, page: 1 });
-      setArticles(data);
+      setArticles(data.articles || data);
+      if (data.totalPages) setTotalPages(data.totalPages);
+      if (data.total) setTotalArticles(data.total);
     } catch (err) {
       console.error('Failed to fetch news:', err);
     } finally {
@@ -100,7 +108,7 @@ function Home() {
           <div className="stats-bar">
             <div className="stat-item">
               <span>Articles:</span>
-              <strong>{articles.length}</strong>
+              <strong>{totalArticles}</strong>
             </div>
             <div className="stat-item">
               <span>Languages:</span>
@@ -138,10 +146,10 @@ function Home() {
                 >
                   Previous
                 </button>
-                <span>Page {page}</span>
+                <span>Page {page} of {totalPages}</span>
                 <button 
                   onClick={() => setPage(p => p + 1)}
-                  disabled={articles.length < 12}
+                  disabled={page >= totalPages}
                 >
                   Next
                 </button>

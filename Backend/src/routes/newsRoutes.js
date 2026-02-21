@@ -82,7 +82,10 @@ router.get("/news", async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.json(articles);
+    const total = await Article.countDocuments(filter);
+    const totalPages = Math.ceil(total / limit);
+
+    res.json({ articles, total, totalPages, page: Number(page), limit: Number(limit) });
   } catch {
     res.status(500).json({ message: "Server error" });
   }
