@@ -9,7 +9,10 @@ import { fetchAndStoreNews } from "./services/newsService.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173", "http://localhost:3000"],
+  credentials: true
+}));
 app.use(express.json());
 app.use("/api", newsRoutes);
 app.use("/api/auth", authRoutes);
