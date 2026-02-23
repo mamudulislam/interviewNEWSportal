@@ -101,6 +101,41 @@ function Home() {
     if (page < totalPages) setPage(page + 1);
   };
 
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const maxVisible = 6;
+    const pages = [];
+    
+    if (totalPages <= maxVisible) {
+      // Show all pages if total is less than max
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Show pages around current page
+      const half = Math.floor(maxVisible / 2);
+      let start = page - half;
+      let end = page + half;
+      
+      // Adjust boundaries
+      if (start < 1) {
+        end += 1 - start;
+        start = 1;
+      }
+      if (end > totalPages) {
+        start -= end - totalPages;
+        end = totalPages;
+      }
+      start = Math.max(1, start);
+      
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
+  };
+
   return (
     <div className="home">
       <header className="header">
@@ -156,14 +191,15 @@ function Home() {
                 <button 
                   onClick={handlePrevPage}
                   disabled={page === 1}
+                  className="pagination-btn"
                 >
-                  Previous
+                  ← Previous
                 </button>
-                {Array.from({ length: Math.min(6, totalPages) }, (_, i) => i + 1).map(num => (
+                {getPageNumbers().map(num => (
                   <button
                     key={num}
                     onClick={() => setPage(num)}
-                    className={page === num ? 'active' : ''}
+                    className={`pagination-btn ${page === num ? 'active' : ''}`}
                   >
                     {num}
                   </button>
@@ -171,8 +207,9 @@ function Home() {
                 <button 
                   onClick={handleNextPage}
                   disabled={page >= totalPages}
+                  className="pagination-btn"
                 >
-                  Next
+                  Next →
                 </button>
               </div>
             </>

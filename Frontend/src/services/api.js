@@ -16,7 +16,7 @@ export const fetchArticles = async (filters = {}) => {
   if (filters.limit) params.append('limit', filters.limit);
 
   const response = await axios.get(`${API_BASE}/news?${params.toString()}`);
-  return response.data.articles || response.data;
+  return response.data;
 };
 
 export const fetchArticleById = async (id) => {

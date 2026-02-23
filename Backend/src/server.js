@@ -21,13 +21,16 @@ app.use("/api/auth", authRoutes);
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB connected");
+    console.log("✓ MongoDB connected");
     
     startNewsCron();
     
     await fetchAndStoreNews('file');
     
-    app.listen(5000, () => console.log("Server running on port 5000"));
+    app.listen(5000, () => {
+      console.log("✓ Server running on port 5000");
+      console.log("📰 Cron jobs active - fetching latest news every hour");
+    });
   } catch (err) {
     console.error("Failed to start server:", err);
     process.exit(1);
