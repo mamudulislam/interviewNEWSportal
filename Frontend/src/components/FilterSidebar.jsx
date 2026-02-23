@@ -10,7 +10,10 @@ function FilterSidebar({ filters, setFilters, filterOptions }) {
   const handleChange = (key, value) => {
     const updated = { ...localFilters, [key]: value };
     setLocalFilters(updated);
-    setFilters(updated);
+  };
+
+  const applyFilters = () => {
+    setFilters(localFilters);
   };
 
   const handleCategoryToggle = (category) => {
@@ -133,6 +136,10 @@ function FilterSidebar({ filters, setFilters, filterOptions }) {
           ))}
         </select>
       </div>
+
+      <button onClick={applyFilters} className="apply-filters-btn">
+        Apply Filters
+      </button>
     </aside>
   );
 }

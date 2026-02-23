@@ -5,6 +5,7 @@ import cors from "cors";
 import newsRoutes from "./routes/newsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { fetchAndStoreNews } from "./services/newsService.js";
+import { startNewsCron } from "./cron/newsCron.js";
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ const startServer = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected");
+    
+    startNewsCron();
     
     await fetchAndStoreNews('file');
     

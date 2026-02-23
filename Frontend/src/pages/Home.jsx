@@ -65,6 +65,11 @@ function Home() {
     loadArticles();
   }, [filters, page]);
 
+  const handleSetFilters = (newFilters) => {
+    setFilters(newFilters);
+    setPage(1);
+  };
+
   const handleFetch = async (source = 'file') => {
     setFetching(true);
     try {
@@ -88,6 +93,14 @@ function Home() {
     }
   };
 
+  const handlePrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
   return (
     <div className="home">
       <header className="header">
@@ -101,7 +114,7 @@ function Home() {
       <div className="main-content">
         <FilterSidebar 
           filters={filters} 
-          setFilters={setFilters} 
+          setFilters={handleSetFilters} 
           filterOptions={filterOptions}
         />
         <main className="feed">
@@ -141,14 +154,22 @@ function Home() {
               </div>
               <div className="pagination">
                 <button 
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  onClick={handlePrevPage}
                   disabled={page === 1}
                 >
                   Previous
                 </button>
-                <span>Page {page} of {totalPages}</span>
+                {Array.from({ length: Math.min(6, totalPages) }, (_, i) => i + 1).map(num => (
+                  <button
+                    key={num}
+                    onClick={() => setPage(num)}
+                    className={page === num ? 'active' : ''}
+                  >
+                    {num}
+                  </button>
+                ))}
                 <button 
-                  onClick={() => setPage(p => p + 1)}
+                  onClick={handleNextPage}
                   disabled={page >= totalPages}
                 >
                   Next

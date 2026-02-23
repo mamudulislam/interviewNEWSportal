@@ -13,7 +13,7 @@ function ArticlePage() {
       try {
         const data = await fetchArticleById(id);
         setArticle(data);
-      } catch (err) {
+      } catch {
         setError('Article not found');
       } finally {
         setLoading(false);
