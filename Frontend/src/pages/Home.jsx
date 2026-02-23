@@ -18,7 +18,7 @@ function Home() {
       setLoading(true);
       try {
         const [articlesData, options] = await Promise.all([
-          fetchArticles({ limit: 12, page: 1 }),
+          fetchArticles({ limit: 10, page: 1 }),
           fetchFilterOptions()
         ]);
         setArticles(articlesData.articles || articlesData);
@@ -52,7 +52,7 @@ function Home() {
     const loadArticles = async () => {
       setLoading(true);
       try {
-        const data = await fetchArticles({ ...filters, limit: 12, page });
+        const data = await fetchArticles({ ...filters, limit: 10, page });
         setArticles(data.articles || data);
         if (data.totalPages) setTotalPages(data.totalPages);
         if (data.total) setTotalArticles(data.total);
